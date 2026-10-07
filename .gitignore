@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+dist/
+build/
+backend/dist/
+frontend/dist/
+
+# Environment files
+.env
+.env.local
+*.env
+!*.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads & generated files
+backend/uploads/
+backend/logs/
+
+# AI service artifacts
+ai-service/models/*.joblib
+ai-service/data/sample_sales.csv
+
+# Editor/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Prisma
+backend/prisma/dev.db
+
+# Misc
+*.tsbuildinfo
+.turbo/
