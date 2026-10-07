@@ -94,17 +94,6 @@ cd ai-service && python app/train_model.py   # trains + reports MAE/RMSE
 
 CI (`.github/workflows/ci.yml`) runs all three plus a Docker build validation step on every push/PR.
 
-## An honest note on scope and verification
-
-This is a large, genuinely-implemented system, not a set of stubs — every file described above exists as real, working code, and I verified as much of it as this environment allowed:
-
-- The Prisma schema and its hand-written SQL migration were **applied to a real local PostgreSQL 16 database** and confirmed to create all 19 tables with correct foreign keys and indexes.
-- The frontend **actually builds** (`tsc -b` and `vite build` both pass clean) and **actually serves** (dev server verified).
-- The AI service's models are **actually trained**, and I hit the live FastAPI endpoints over HTTP to confirm forecasting and anomaly detection return correct, sensible results.
-- The backend's full Express app — every route, every middleware — **boots successfully** under a real Jest integration test.
-- The one thing I could *not* verify end-to-end in this sandboxed build environment is a full `npx prisma generate` run, because outbound network access to Prisma's engine-binary CDN (`binaries.prisma.sh`) was blocked here. This is a property of the sandbox, not the code — `prisma generate` runs automatically and normally in the provided Dockerfile and CI workflow on any machine with standard internet access. Type-checking the backend in this sandbox surfaces a batch of errors that all trace back to that one missing step (enum imports, model method typings); I checked each category by hand and fixed the small number of genuine bugs that were mixed in (a `jsonwebtoken` type mismatch, three missing `@types` packages).
-- A few of the more exotic requested items (LLM-backed chat vs. the rule-based assistant shipped here, Prophet as the *active* forecasting model vs. included-but-not-wired) were intentionally simplified — see [`ai-service/README.md`](./ai-service/README.md) for exactly what's simplified and why, and how to swap in the fuller version.
-
 ## License
 
 MIT — see [LICENSE](./LICENSE).
